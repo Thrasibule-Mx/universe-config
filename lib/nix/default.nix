@@ -30,6 +30,12 @@
 }:
 with lib; {
   nix = {
+    mkTriStateOption = default: description:
+      mkOption {
+        inherit default description;
+        type = types.nullOr types.bool;
+      };
+
     mkEnabledOption = description:
       mkOption {
         inherit description;
