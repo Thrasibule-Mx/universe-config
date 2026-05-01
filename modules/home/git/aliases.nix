@@ -116,7 +116,7 @@ in {
 
   config = mkIf cfg.enable {
     programs.git = {
-      aliases =
+      settings.alias =
         builtins.removeAttrs
         (defaultAliases // cfg.extraAliases)
         cfg.excludeAliases;

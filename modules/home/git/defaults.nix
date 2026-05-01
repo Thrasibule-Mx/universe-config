@@ -46,7 +46,7 @@
 with lib; let
   cfg = config.universe.home.git.defaults;
 
-  gitOptions = {
+  settings = {
     commit.verbose = true;
     init.defaultBranch = "main";
     merge.ff = false;
@@ -69,6 +69,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    programs.git.extraConfig = gitOptions;
+    programs.git = {
+      inherit settings;
+    };
   };
 }

@@ -56,7 +56,7 @@ with lib; let
     then {}
     else {syntax-theme = cfg.theme;};
 
-  gitOptions = {
+  settings = {
     diff = {
       algorithm = "histogram";
       submodule = "log";
@@ -106,12 +106,15 @@ in {
   };
 
   config = mkIf cfg.enable {
+    programs.delta = {
+      inherit (cfg) enable;
+
+      enableGitIntegration = cfg.enable;
+      options = deltaOptions // deltaTheme // cfg.extraOptions;
+    };
+
     programs.git = {
-      extraConfig = gitOptions;
-      delta = {
-        inherit (cfg) enable;
-        options = deltaOptions // deltaTheme // cfg.extraOptions;
-      };
+      inherit settings;
     };
   };
 }

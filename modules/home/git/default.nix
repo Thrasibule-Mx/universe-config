@@ -51,22 +51,28 @@ in {
   options.universe.home.git = with types; {
     enable = mkEnableOption "universe.home.git";
 
-    userEmail = mkOption {
-      description = "Email address of the Git user.";
-      default = null;
-      type = nullOr str;
-    };
+    user = {
+      email = mkOption {
+        description = "Email address of the Git user.";
+        default = null;
+        type = nullOr str;
+      };
 
-    userName = mkOption {
-      description = "Full name of the Git user.";
-      default = null;
-      type = nullOr str;
+      name = mkOption {
+        description = "Full name of the Git user.";
+        default = null;
+        type = nullOr str;
+      };
     };
   };
 
   config = mkIf cfg.enable {
     programs.git = {
-      inherit (cfg) enable userEmail userName;
+      inherit (cfg) enable;
+
+      settings.user = {
+        inherit (cfg.user) email name;
+      };
     };
   };
 }
