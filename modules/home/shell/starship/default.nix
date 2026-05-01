@@ -254,6 +254,18 @@ with lib; let
     palette = mkIf (cfg.palette != null) cfg.palette;
     scan_timeout = cfg.scanTimeout;
   };
+
+  zshIntegration = ''
+    # Redraw prompt before command execution.
+    autoload -Uz add-zle-hook-widget
+    function refresh_prompt_on_finish() {
+      if typeset -f starship_precmd > /dev/null; then
+        starship_precmd
+      fi
+      zle .reset-prompt
+    }
+    add-zle-hook-widget -Uz zle-line-finish refresh_prompt_on_finish
+  '';
 in {
   imports = universe.fs.import-directory ./.;
 
@@ -343,6 +355,10 @@ in {
     programs.starship = {
       inherit (cfg) enable enableZshIntegration;
       settings = cfg.settings // ourSettings;
+    };
+
+    programs.zsh = mkIf cfg.enableZshIntegration {
+      initContent = zshIntegration;
     };
   };
 }
