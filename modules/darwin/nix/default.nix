@@ -76,7 +76,7 @@ in {
         "@admin"
         "@nix"
       ];
-      type = listOf string;
+      type = listOf str;
     };
 
     trustedUsers = mkOption {
@@ -89,7 +89,7 @@ in {
       default = [
         "@admin"
       ];
-      type = listOf string;
+      type = listOf str;
     };
 
     homebrew = {
