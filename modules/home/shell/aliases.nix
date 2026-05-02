@@ -82,12 +82,35 @@ with lib; let
 
   defaultAliases = {};
 
-  cfgAliases = utilAliases // defaultAliases // cfg.extraAliases;
+  navigationAliases = {
+    "-" = "popd";
+    "?" = "dirs";
+    ".." = "cd ..";
+    "/" = "cd";
+    "+" = "pushd";
+    "~" = "cd ~";
+  };
+
+  cfgEnabled =
+    (
+      if cfg.enable
+      then defaultAliases
+      else {}
+    )
+    // (
+      if cfg.navigation.enable
+      then navigationAliases
+      else {}
+    );
+
+  cfgAliases = utilAliases // cfgEnabled // cfg.extraAliases;
   shellAliases = removeAttrs cfgAliases cfg.excludeAliases;
 in {
   options.universe.home.shell.aliases = with types;
   with universe.nix; {
     enable = mkEnabledOption "Whether to enable.universe.home.shell.aliases";
+
+    navigation.enable = mkEnabledOption "Enable direction navigation aliases.";
 
     extraAliases = mkOption {
       description = "A set of shell aliases to join along with the default ones.";
