@@ -91,6 +91,13 @@ with lib; let
     "~" = "cd ~";
   };
 
+  opensslAliases = {
+    "rand" = "openssl rand -base64";
+    "req" = "openssl req -noout -text -in";
+    "s_client" = "openssl s_client -showcerts -connect";
+    "x509" = "openssl x509 -noout -text -in";
+  };
+
   cfgEnabled =
     (
       if cfg.enable
@@ -100,6 +107,11 @@ with lib; let
     // (
       if cfg.navigation.enable
       then navigationAliases
+      else {}
+    )
+    // (
+      if cfg.openssl.enable
+      then opensslAliases
       else {}
     );
 
@@ -111,6 +123,7 @@ in {
     enable = mkEnabledOption "Whether to enable.universe.home.shell.aliases";
 
     navigation.enable = mkEnabledOption "Enable direction navigation aliases.";
+    openssl.enable = mkEnableOption "Enable openssl related aliases";
 
     extraAliases = mkOption {
       description = "A set of shell aliases to join along with the default ones.";
