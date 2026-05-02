@@ -47,32 +47,51 @@ with lib; let
   cfg = config.universe.home.shell.aliases;
 
   utilArgs = let
-    args = optionals cfg.enable [
-      {
-        "name" = "chgrp";
-        "args" = ["--preserve-root"];
-      }
-      {
-        "name" = "chmod";
-        "args" = ["--preserve-root"];
-      }
-      {
-        "name" = "chown";
-        "args" = ["--preserve-root"];
-      }
-      {
-        "name" = "cp";
-        "args" = ["--one-file-system"];
-      }
-      {
-        "name" = "mkdir";
-        "args" = ["--parents"];
-      }
-      {
-        "name" = "rm";
-        "args" = ["--one-file-system" "--preserve-root=all"];
-      }
-    ];
+    args =
+      (optionals cfg.enable [
+        {
+          "name" = "chgrp";
+          "args" = ["--preserve-root"];
+        }
+        {
+          "name" = "chmod";
+          "args" = ["--preserve-root"];
+        }
+        {
+          "name" = "chown";
+          "args" = ["--preserve-root"];
+        }
+        {
+          "name" = "cp";
+          "args" = ["--one-file-system"];
+        }
+        {
+          "name" = "mkdir";
+          "args" = ["--parents"];
+        }
+        {
+          "name" = "rm";
+          "args" = ["--one-file-system" "--preserve-root=all"];
+        }
+      ])
+      ++ (optionals cfg.interactive.enable [
+        {
+          "name" = "cp";
+          "args" = ["--interactive"];
+        }
+        {
+          "name" = "ln";
+          "args" = ["--interactive"];
+        }
+        {
+          "name" = "mv";
+          "args" = ["--interactive"];
+        }
+        {
+          "name" = "rm";
+          "args" = ["--interactive=once"];
+        }
+      ]);
   in
     zipAttrsWith
     (name: values: (values |> flatten |> naturalSort |> concatStringSep " "))
@@ -122,6 +141,7 @@ in {
   with universe.nix; {
     enable = mkEnabledOption "Whether to enable.universe.home.shell.aliases";
 
+    interactive.enable = mkEnabledOption "Enable confirmation request on some commmands";
     navigation.enable = mkEnabledOption "Enable direction navigation aliases.";
     openssl.enable = mkEnableOption "Enable openssl related aliases";
 
