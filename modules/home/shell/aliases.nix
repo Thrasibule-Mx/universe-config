@@ -94,7 +94,7 @@ with lib; let
       ]);
   in
     zipAttrsWith
-    (name: values: (values |> flatten |> naturalSort |> concatStringSep " "))
+    (name: values: (values |> flatten |> naturalSort |> universe.strings.concatSpace))
     (map (x: {${x.name} = x.args;}) args);
 
   utilAliases = mapAttrs (k: v: "${k} ${v}") utilArgs;

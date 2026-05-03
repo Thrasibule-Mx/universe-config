@@ -1,4 +1,4 @@
-# lib/types/default.nix
+# lib/types/strings.nix
 # =====================
 #
 # Copying
@@ -18,7 +18,7 @@
   # The namespace of the flake. See `snowfall.namespace`.
   namespace,
   ...
-}: {
-  attrs = import ./attrs.nix {inherit lib inputs namespace;};
-  strings = import ./strings.nix {inherit lib inputs namespace;};
+}:
+with lib; {
+  concatSpace = concatStringsSep " ";
 }
