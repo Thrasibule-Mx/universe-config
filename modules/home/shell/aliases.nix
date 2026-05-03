@@ -74,6 +74,24 @@ with lib; let
           "args" = ["--one-file-system" "--preserve-root=all"];
         }
       ])
+      ++ (optionals cfg.grep.enable (
+        forEach
+        [
+          "egrep"
+          "fgrep"
+          "grep"
+          "xzegrep"
+          "xzfgrep"
+          "xzgrep"
+          "zegrep"
+          "zfgrep"
+          "zgrep"
+        ]
+        (x: {
+          "name" = x;
+          "args" = cfg.grep.options;
+        })
+      ))
       ++ (optionals cfg.interactive.enable [
         {
           "name" = "cp";
@@ -159,6 +177,20 @@ in {
   options.universe.home.shell.aliases = with types;
   with universe.nix; {
     enable = mkEnabledOption "Whether to enable.universe.home.shell.aliases";
+
+    grep = {
+      enable = mkEnabledOption "Enable grep aliases.";
+
+      options = mkOption {
+        description = "Options to provide to the `grep` command.";
+        default = [
+          "--color=auto"
+          "--extended-regexp"
+          "--no-messages"
+        ];
+        type = listOf str;
+      };
+    };
 
     interactive.enable = mkEnabledOption "Enable confirmation request on some commmands";
 
