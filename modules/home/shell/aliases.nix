@@ -91,6 +91,12 @@ with lib; let
           "name" = "rm";
           "args" = ["--interactive=once"];
         }
+      ])
+      ++ (optionals cfg.ls.enable [
+        {
+          "name" = "ls";
+          "args" = cfg.ls.options;
+        }
       ]);
   in
     zipAttrsWith
@@ -100,6 +106,14 @@ with lib; let
   utilAliases = mapAttrs (k: v: "${k} ${v}") utilArgs;
 
   defaultAliases = {};
+
+  lsOptions = universe.strings.concatSpace cfg.ls.options;
+  lsAliases = {
+    "l" = "ls ${utilArgs.ls}";
+    "la" = "ls ${utilArgs.ls} --almost-all";
+    "ll" = "ls ${utilArgs.ls} -l";
+    "lla" = "ls ${utilArgs.ls} --almost-all -l";
+  };
 
   navigationAliases = {
     "-" = "popd";
@@ -124,6 +138,11 @@ with lib; let
       else {}
     )
     // (
+      if cfg.ls.enable
+      then lsAliases
+      else {}
+    )
+    // (
       if cfg.navigation.enable
       then navigationAliases
       else {}
@@ -142,6 +161,22 @@ in {
     enable = mkEnabledOption "Whether to enable.universe.home.shell.aliases";
 
     interactive.enable = mkEnabledOption "Enable confirmation request on some commmands";
+
+    ls = {
+      enable = mkEnabledOption "Enable aliases for the `ls` command.";
+
+      options = mkOption {
+        description = "Options to provide to the `ls` command.";
+        default = [
+          "--color=auto"
+          "--group-directories-first"
+          "--human-readable"
+          "--sort=extension"
+        ];
+        type = listOf str;
+      };
+    };
+
     navigation.enable = mkEnabledOption "Enable direction navigation aliases.";
     openssl.enable = mkEnableOption "Enable openssl related aliases";
 
