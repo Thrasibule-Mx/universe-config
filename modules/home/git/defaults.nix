@@ -58,6 +58,7 @@ with lib; let
     rebase.autoSquash = true;
     rerere.enabled = true;
     status.submoduleSummary = true;
+    tag.sort = "-version:refname";
   };
 in {
   options.universe.home.git.defaults = with types; {
