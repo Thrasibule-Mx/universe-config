@@ -46,6 +46,10 @@
 with lib; let
   cfg = config.universe.home.git.aliases;
 
+  _num = {
+    tagRefAlign = 19;
+  };
+
   defaultAliases = {
     alias = "config --get-regexp '^alias\.'";
     br = "branch --format='${gitFormat.branch}'";
@@ -82,10 +86,10 @@ with lib; let
     branch = "%(color:bold magenta)%(HEAD)%(color:reset) %(color:bold green)%(refname:short)%(color:reset)  %(contents:subject) %(color:green)%(committerdate:relative) %(color:blue)[%(authorname)]%(color:reset)";
     log = rec {
       detailed = "%n${oneline}";
-      oneline = "%C(yellow)%h%C(reset) %C(magenta)%ar%C(reset) %s %C(blue)[%cn]%C(reset)%C(bold green)%d%C(reset)";
+      oneline = "%C(yellow)%h%C(reset) %C(magenta)%ar%C(reset) %s %C(bold cyan)%G?%C(reset) %C(blue)[%cn]%C(reset)%C(bold green)%d%C(reset)";
     };
     tag = {
-      detailed = "%(color:bold magenta)%(HEAD)%(color:reset) %(color:bold green)%(refname:short)%(color:reset)  %(color:yellow)%(objectname:short)%(color:reset) %(contents:subject) %(color:green)%(committerdate:relative)%(color:reset) %(color:blue)[%(authorname)]%(color:reset)";
+      detailed = "%(color:bold magenta)%(HEAD)%(color:reset) %(align:${_num.tagRefAlign})%(color:bold green)%(refname:short)%(color:reset)%(end)  %(color:yellow)%(objectname:short)%(color:reset) %(contents:subject)%(if)%(committerdate)%(then) %(color:green)%(committerdate:relative)%(color:reset)%(end)%(if)%(signature)%(then) %(color:bold cyan)%(signature:grade)%(color:reset)%(end)%(if)%(authorname)%(then) %(color:blue)[%(authorname)]%(color:reset)%(end)";
       oneline = "%(color:bold magenta)%(HEAD)%(color:reset) %(color:bold green)%(refname:short)%(color:reset)";
     };
   };
