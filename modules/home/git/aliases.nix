@@ -67,6 +67,7 @@ with lib; let
     oops = "commit --amend";
     pop = "stash pop";
     remove = "restore --staged";
+    resign = "rebase --autosquash --exec 'git commit --amend --gpg-sign --no-edit'";
     save = "stash push";
     ss = "status --branch --short";
     st = "status";
