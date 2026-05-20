@@ -70,6 +70,7 @@ with lib; let
     new = "switch --create";
     oops = "commit --amend";
     pop = "stash pop";
+    recommit = "!git commit --edit --file=\"$(git rev-parse --git-dir)/COMMIT_EDITMSG\"";
     remove = "restore --staged";
     resign = "rebase --autosquash --exec 'git commit --amend --gpg-sign --no-edit'";
     save = "stash push";
