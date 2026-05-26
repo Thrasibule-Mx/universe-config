@@ -407,7 +407,7 @@ in {
 
         extended = true;
         findNoDups = true;
-        path = "${config.xdg.dataHome}/zsh/history";
+        path = "${config.xdg.stateHome}/zsh/history";
       };
 
       syntaxHighlighting = {
