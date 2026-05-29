@@ -33,5 +33,10 @@
 }:
 mkShell {
   inherit (lib.universe.dev.git-hooks.${pkgs.stdenv.hostPlatform.system}) shellHook;
+
   buildInputs = lib.universe.dev.git-hooks.${pkgs.stdenv.hostPlatform.system}.enabledPackages;
+  packages = with pkgs; [
+    nixd
+    nixfmt
+  ];
 }
