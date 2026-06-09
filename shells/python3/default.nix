@@ -1,5 +1,5 @@
-# shells/python/default.nix
-# =========================
+# shells/python3/default.nix
+# ==========================
 #
 # Copying
 # -------
@@ -84,9 +84,22 @@
   );
 in
   mkShell {
+    env =
+      pkgs.python3.env
+      // {
+        PYTHON_CONFIGURE_OPTS = lib.universe.strings.concatSpace pkgs.python3.configureFlags;
+      };
+
+    inputsFrom = with pkgs; [
+      python3
+    ];
+
+    nativeBuildInputs = with pkgs; [
+      pkg-config
+    ];
+
     packages = with pkgs;
       [
-        python3
         black
         cookiecutter
         git
@@ -100,16 +113,7 @@ in
 
         fastfetch
       ]
-      ++ pkgs.python3.buildInputs
-      ++ [
-        libb2
-        libuuid
-        tcl
-        tk
-      ]
       ++ (lib.optional (shell != "") pkgs.${shell});
-
-    PYTHON_CONFIGURE_OPTS = builtins.concatStringsSep " " pkgs.python3.configureFlags;
 
     name = "python3";
     shellHook = ''
